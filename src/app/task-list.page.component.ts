@@ -75,7 +75,7 @@ export class TaskListPageComponent {
   }
 
   addTask(name: string) {
-    // this.tasks.push({
+    // this.listState.push({
     //   name,
     //   done: false,
     // });
