@@ -17,22 +17,4 @@ import { TaskListPageComponent } from './task-list.page.component';
     </main>
   `,
 })
-export class AppComponent {
-  tasks = [
-    {
-      name: 'Angular introduction',
-      done: false,
-    },
-    {
-      name: 'Learn components',
-      done: true,
-    },
-  ];
-
-  addTask(name: string) {
-    this.tasks.push({
-      name,
-      done: false,
-    });
-  }
-}
+export class AppComponent {}
