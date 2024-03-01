@@ -26,7 +26,7 @@ import { ComponentListState } from './list-state.type';
 export class TaskListPageComponent {
   listState: ComponentListState<Task> = { state: 'idle' };
 
-  constructor() {
+  ngOnInit() {
     this.listState = { state: 'loading' };
     getTasks().then((response) => {
       if (Array.isArray(response)) {
