@@ -24,7 +24,7 @@ import { ComponentListState } from './list-state.type';
   `,
 })
 export class TaskListPageComponent {
-  listState: ComponentListState = { state: 'idle' };
+  listState: ComponentListState<Task> = { state: 'idle' };
 
   constructor() {
     this.listState = { state: 'loading' };

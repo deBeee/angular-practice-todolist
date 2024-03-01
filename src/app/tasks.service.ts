@@ -1,6 +1,6 @@
 import { Task } from './Task';
-import { ListFetchingError } from './task-list.page.component';
 import { wait } from './wait';
+import { ListFetchingError } from './list-state.type';
 
 const URL = 'http://localhost:3000';
 

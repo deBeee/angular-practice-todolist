@@ -11,13 +11,17 @@ type LoadingState = {
   state: 'loading';
 };
 // success
-type SuccessState = {
+type SuccessState<T> = {
   state: 'success';
-  results: Task[];
+  results: T[];
 };
 // error
 type ErrorState = {
   state: 'error';
   error: ListFetchingError;
 };
-export type ComponentListState = IdleState | LoadingState | SuccessState | ErrorState;
+export type ComponentListState<T> =
+  | IdleState
+  | LoadingState
+  | SuccessState<T>
+  | ErrorState;
