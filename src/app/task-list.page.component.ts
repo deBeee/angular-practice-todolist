@@ -32,7 +32,9 @@ type ComponentListState = IdleState | LoadingState | SuccessState | ErrorState;
   standalone: true,
   imports: [TasksListComponent, SubmitTextComponent, NgIf],
   template: `
-    <app-submit-text (submitText)="addTask($event)" />
+    <app-submit-text
+      (submitText)="listState.state === 'success' && addTask($event, listState.results)"
+    />
     <app-tasks-list
       *ngIf="listState.state === 'success'"
       class="block mt-4"
@@ -74,10 +76,33 @@ export class TaskListPageComponent {
       });
   }
 
-  addTask(name: string) {
-    // this.listState.push({
-    //   name,
-    //   done: false,
-    // });
+  addTask(name: string, tasks: Task[]) {
+    fetch(`${this.URL}/tasks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        createdAt: new Date().getTime(),
+        name,
+        done: false,
+      } as Task),
+    })
+      .then<Task | Error>((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        return new Error('Cant add task');
+      })
+      .then((response) => {
+        if ('id' in response) {
+          this.listState = {
+            state: 'success',
+            results: tasks.concat(response),
+          };
+        } else {
+          alert(response.message);
+        }
+      });
   }
 }
