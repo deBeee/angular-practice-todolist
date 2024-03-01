@@ -6,6 +6,27 @@ import { NgIf } from '@angular/common';
 
 type ListFetchingError = { status: number; message: string };
 
+// idle - initial
+type IdleState = {
+  state: 'idle';
+};
+// loading
+type LoadingState = {
+  state: 'loading';
+};
+// success
+type SuccessState = {
+  state: 'success';
+  results: Task[];
+};
+// error
+type ErrorState = {
+  state: 'error';
+  error: ListFetchingError;
+};
+
+type ComponentListState = IdleState | LoadingState | SuccessState | ErrorState;
+
 @Component({
   selector: 'app-task-list-page',
   standalone: true,
@@ -13,42 +34,42 @@ type ListFetchingError = { status: number; message: string };
   template: `
     <app-submit-text (submitText)="addTask($event)" />
     <app-tasks-list
-      *ngIf="!loading; else loadingTemplate"
+      *ngIf="listState.state === 'success'"
       class="block mt-4"
-      [tasks]="tasks"
+      [tasks]="listState.results"
     />
-
-    <p *ngIf="error">{{ error.message }}</p>
-
-    <ng-template #loadingTemplate>
-      <p>Loading...</p>
-    </ng-template>
+    <p *ngIf="listState.state === 'error'">{{ listState.error.message }}</p>
+    <p *ngIf="listState.state === 'loading'">Loading...</p>
   `,
 })
 export class TaskListPageComponent {
-  tasks: Task[] = [];
+  listState: ComponentListState = { state: 'idle' };
 
-  loading = false;
-  error?: ListFetchingError;
   private readonly URL = 'http://localhost:3000';
 
   constructor() {
-    this.loading = true;
+    this.listState = { state: 'loading' };
     fetch(`${this.URL}/tasks`)
       .then<Task[] | ListFetchingError>((response) => {
         if (response.ok) {
           return response.json();
         }
+
         return { status: response.status, message: response.statusText };
       })
       .then((response) => {
         setTimeout(() => {
           if (Array.isArray(response)) {
-            this.tasks = response;
+            this.listState = {
+              state: 'success',
+              results: response,
+            };
           } else {
-            this.error = response;
+            this.listState = {
+              state: 'error',
+              error: response,
+            };
           }
-          this.loading = false;
         }, 1200);
       });
   }
