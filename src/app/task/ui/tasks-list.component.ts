@@ -87,6 +87,8 @@ export class TasksListComponent {
         alert(response.message);
       }
     });
+
+    this.editMode = false;
   }
 
   handleSingleClick(task: Task) {
