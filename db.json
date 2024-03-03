@@ -1,82 +1,16 @@
 {
   "tasks": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Angular introduction",
       "done": false,
       "createdAt": 1693042928127
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Learn components",
       "done": true,
       "createdAt": 1693042949144
-    },
-    {
-      "id": "b401",
-      "createdAt": 1709323340265,
-      "name": "ppp",
-      "done": false
-    },
-    {
-      "id": "6468",
-      "createdAt": 1709323392474,
-      "name": "dddd",
-      "done": false
-    },
-    {
-      "id": "0cac",
-      "createdAt": 1709323414394,
-      "name": "sa",
-      "done": false
-    },
-    {
-      "id": "6d04",
-      "createdAt": 1709323442931,
-      "name": "w",
-      "done": false
-    },
-    {
-      "id": "ad92",
-      "createdAt": 1709323512152,
-      "name": "s",
-      "done": false
-    },
-    {
-      "id": "3f63",
-      "createdAt": 1709324285464,
-      "name": "d",
-      "done": false
-    },
-    {
-      "id": "de1a",
-      "createdAt": 1709324711731,
-      "name": "s",
-      "done": false
-    },
-    {
-      "id": "0cfe",
-      "createdAt": 1709324716156,
-      "name": "dsdsds",
-      "done": false
-    },
-    {
-      "id": "6c15",
-      "createdAt": 1709324871403,
-      "name": "uuu",
-      "done": false
-    },
-    {
-      "id": "5b75",
-      "createdAt": 1709328388521,
-      "name": "s",
-      "done": false
-    },
-    {
-      "id": "db3f",
-      "createdAt": 1709328839047,
-      "name": "XDDD",
-      "done": false
     }
   ]
 }
