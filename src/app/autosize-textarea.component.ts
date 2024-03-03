@@ -10,7 +10,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       [value]="value"
       class="resize-none overflow-hidden focus:outline-orange-400 w-full"
       (click)="$event.stopPropagation()"
-      (keyup.enter)="submitText.emit(textarea.value); textarea.value = ''"
+      (keyup.enter)="submitText.emit(textarea.value.trim()); textarea.value = ''"
       (input)="calcHeight(textarea)"
     ></textarea>
   `,

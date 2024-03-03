@@ -28,12 +28,13 @@ import { TasksService } from './tasks.service';
             (dblclick)="switchToEditMode()"
           >
             <header class="flex justify-end">
-              <app-remove-item-button (confirm)="delete(task.id)" />
+              <app-remove-item-button (confirm)="deleteTask(task.id)" />
             </header>
             <section class="text-left">
               <app-autosize-textarea
                 *ngIf="editMode; else previewModeTemplate"
                 (keyup.escape)="editMode = false"
+                (submitText)="updateTask(task.id, $event)"
                 [value]="task.name"
               />
 
@@ -63,10 +64,25 @@ export class TasksListComponent {
 
   private tasksService = inject(TasksService);
 
-  delete(taskId: number) {
+  deleteTask(taskId: number) {
     this.tasksService.delete(taskId).then((response) => {
       if ('id' in response) {
         this.tasks = this.tasks.filter((task) => task.id !== response.id);
+      } else {
+        alert(response.message);
+      }
+    });
+  }
+
+  updateTask(taskId: number, newTaskName: string) {
+    this.tasksService.update(taskId, newTaskName).then((response) => {
+      if ('id' in response) {
+        this.tasks = this.tasks.map((task) => {
+          if (task.id === taskId) {
+            return { ...task, name: newTaskName };
+          }
+          return task;
+        });
       } else {
         alert(response.message);
       }
