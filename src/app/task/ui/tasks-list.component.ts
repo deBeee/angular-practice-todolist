@@ -25,15 +25,15 @@ import { TasksService } from '../data-access/tasks.service';
           <button
             class="w-full"
             (click)="handleSingleClick(task)"
-            (dblclick)="switchToEditMode()"
+            (dblclick)="switchToEditMode(task)"
           >
             <header class="flex justify-end">
               <app-remove-item-button (confirm)="deleteTask(task.id)" />
             </header>
             <section class="text-left">
               <app-autosize-textarea
-                *ngIf="editMode; else previewModeTemplate"
-                (keyup.escape)="editMode = false"
+                *ngIf="editMode && taskOnEditId === task.id; else previewModeTemplate"
+                (keyup.escape)="editMode = false; taskOnEditId = null"
                 (submitText)="updateTask(task.id, $event)"
                 [value]="task.name"
               />
@@ -59,6 +59,8 @@ export class TasksListComponent {
 
   removeMode = false;
   editMode = false;
+
+  taskOnEditId: string | null = null;
 
   isSingleClick = true;
 
@@ -89,6 +91,7 @@ export class TasksListComponent {
     });
 
     this.editMode = false;
+    this.taskOnEditId = null;
   }
 
   handleSingleClick(task: Task) {
@@ -101,9 +104,10 @@ export class TasksListComponent {
     }, 150);
   }
 
-  switchToEditMode() {
+  switchToEditMode(task: Task) {
     this.isSingleClick = false;
     this.editMode = true;
+    this.taskOnEditId = task.id;
   }
 
   toggleDoneStatus(task: Task) {
