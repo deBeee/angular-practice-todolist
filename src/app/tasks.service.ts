@@ -39,11 +39,6 @@ export async function addTask(name: string) {
   });
 }
 
-export const tasksService = {
-  getTasks,
-  addTask,
-};
-
 @Injectable({
   providedIn: 'root',
 })
@@ -62,7 +57,7 @@ export class TasksService {
     });
   }
 
-  async delete(taskId: number) {
+  async delete(taskId: string) {
     return fetch(`${this.URL}/tasks/${taskId}`, {
       method: 'DELETE',
     }).then<Task | Error>((response) => {
@@ -74,7 +69,7 @@ export class TasksService {
     });
   }
 
-  async update(taskId: number, name: string) {
+  async update(taskId: string, name: string) {
     return fetch(`${this.URL}/tasks/${taskId}`, {
       method: 'PATCH',
       headers: {

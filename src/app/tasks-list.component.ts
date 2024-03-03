@@ -64,7 +64,7 @@ export class TasksListComponent {
 
   private tasksService = inject(TasksService);
 
-  deleteTask(taskId: number) {
+  deleteTask(taskId: string) {
     this.tasksService.delete(taskId).then((response) => {
       if ('id' in response) {
         this.tasks = this.tasks.filter((task) => task.id !== response.id);
@@ -74,7 +74,7 @@ export class TasksListComponent {
     });
   }
 
-  updateTask(taskId: number, newTaskName: string) {
+  updateTask(taskId: string, newTaskName: string) {
     this.tasksService.update(taskId, newTaskName).then((response) => {
       if ('id' in response) {
         this.tasks = this.tasks.map((task) => {

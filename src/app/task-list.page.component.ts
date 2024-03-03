@@ -3,7 +3,7 @@ import { TasksListComponent } from './tasks-list.component';
 import { SubmitTextComponent } from './submit-text.component';
 import { Task } from './Task';
 import { NgIf } from '@angular/common';
-import { tasksService, TasksService } from './tasks.service';
+import { TasksService } from './tasks.service';
 import { ComponentListState } from './list-state.type';
 
 @Component({
