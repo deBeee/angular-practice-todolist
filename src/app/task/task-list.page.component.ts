@@ -3,14 +3,56 @@ import { TasksListComponent } from './ui/tasks-list.component';
 import { SubmitTextComponent } from '../shared/ui/submit-text.component';
 import { Task } from './model/Task';
 import { NgIf } from '@angular/common';
-import { TasksService } from './data-access/tasks.service';
+import { GetAllTasksSearchParams, TasksService } from './data-access/tasks.service';
 import { ComponentListState } from '../utils/list-state.type';
 import { SORT_BY, SortBy } from '../shared/enums/sort-by.enum';
+import {
+  FormControl,
+  FormGroup,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+} from '@angular/forms';
+
+export const TODO_STATUS = {
+  ALL: 'ALL',
+  TODO: 'TODO',
+  DONE: 'DONE',
+} as const;
+
+type TodoStatus = keyof typeof TODO_STATUS;
+
+type TasksListFiltersForm = FormGroup<{
+  searchTerm: FormControl<string>;
+  status: FormControl<TodoStatus>;
+  sortBy: FormControl<SortBy>;
+}>;
+
+type TasksListFiltersFormValue = ReturnType<TasksListFiltersForm['getRawValue']>;
+
+function getAllTasksSearchParams(
+  formValue: TasksListFiltersFormValue,
+): GetAllTasksSearchParams {
+  let searchParams = {
+    _sort: 'createdAt',
+    _order: formValue.sortBy.toLocaleLowerCase(),
+    q: formValue.searchTerm,
+  } as GetAllTasksSearchParams;
+
+  if (formValue.status === 'TODO') {
+    searchParams.done_like = 'false';
+  } else if (formValue.status === 'DONE') {
+    searchParams.done_like = 'true';
+  } else {
+    searchParams.done_like = '';
+  }
+
+  return searchParams;
+}
 
 @Component({
   selector: 'app-task-list-page',
   standalone: true,
-  imports: [TasksListComponent, SubmitTextComponent, NgIf],
+  imports: [TasksListComponent, SubmitTextComponent, NgIf, ReactiveFormsModule],
   styles: [
     `
       details {
@@ -44,43 +86,50 @@ import { SORT_BY, SortBy } from '../shared/enums/sort-by.enum';
     <app-submit-text
       (submitText)="listState.state === 'success' && addTask($event, listState.results)"
     />
-    <details open>
-      <summary class="marker:content-none">Filters</summary>
-      <div class="mb-2 flex justify-between">
-        <fieldset class="flex flex-col">
-          <label for="filter-search-term">Search</label>
-          <input
-            id="filter-search-term"
-            class="border-b border-b-orange-400 outline-none"
-          />
-        </fieldset>
+    <form [formGroup]="form">
+      <details open>
+        <summary class="marker:content-none">Filters</summary>
+        <div class="mb-2 flex justify-between">
+          <fieldset class="flex flex-col">
+            <label for="filter-search-term">Search</label>
+            <input
+              formControlName="searchTerm"
+              id="filter-search-term"
+              class="border-b border-b-orange-400 outline-none"
+            />
+          </fieldset>
 
-        <fieldset class="flex flex-col">
-          <label for="filter-status">Status</label>
-          <select id="filter-status" class="border border-orange-400 outline-none">
-            <option>-</option>
-            <option>Done</option>
-            <option>Todo</option>
-          </select>
-        </fieldset>
+          <fieldset class="flex flex-col">
+            <label for="filter-status">Status</label>
+            <select
+              formControlName="status"
+              id="filter-status"
+              class="border border-orange-400 outline-none"
+            >
+              <option [value]="statusOptions.ALL">-</option>
+              <option [value]="statusOptions.DONE">Done</option>
+              <option [value]="statusOptions.TODO">Todo</option>
+            </select>
+          </fieldset>
+        </div>
+      </details>
+      <div class="flex gap-12">
+        <button
+          class="rounded px-2 py-1 transition-colors duration-300"
+          [class.bg-green-400]="form.controls.sortBy.value === sortOptions.DESC"
+          (click)="sort(sortOptions.DESC)"
+        >
+          📆🔽
+        </button>
+        <button
+          class="rounded px-2 py-1 transition-colors duration-300"
+          [class.bg-green-400]="form.controls.sortBy.value === sortOptions.ASC"
+          (click)="sort(sortOptions.ASC)"
+        >
+          📆🔼
+        </button>
       </div>
-    </details>
-    <div class="flex gap-12">
-      <button
-        class="rounded px-2 py-1 transition-colors duration-300"
-        [class.bg-green-400]="sortedBy === sortOptions.DESC"
-        (click)="sort(sortOptions.DESC)"
-      >
-        📆🔽
-      </button>
-      <button
-        class="rounded px-2 py-1 transition-colors duration-300"
-        [class.bg-green-400]="sortedBy === sortOptions.ASC"
-        (click)="sort(sortOptions.ASC)"
-      >
-        📆🔼
-      </button>
-    </div>
+    </form>
     <app-tasks-list
       *ngIf="listState.state === 'success'"
       class="block mt-4"
@@ -94,37 +143,49 @@ export class TaskListPageComponent {
   listState: ComponentListState<Task> = { state: 'idle' };
 
   private tasksService = inject(TasksService);
+  private formBuilder = inject(NonNullableFormBuilder);
+
+  form: TasksListFiltersForm = this.formBuilder.group({
+    searchTerm: this.formBuilder.control<string>('learn'),
+    sortBy: this.formBuilder.control<SortBy>('ASC'),
+    status: this.formBuilder.control<TodoStatus>(TODO_STATUS.ALL),
+  });
 
   sortOptions = SORT_BY;
+  statusOptions = TODO_STATUS;
 
   sortedBy: SortBy = SORT_BY.DESC;
 
-  sort(stri: SortBy) {
-    this.sortedBy = stri;
+  sort(sort: SortBy) {
+    this.form.patchValue({
+      sortBy: sort,
+    });
   }
 
   ngOnInit() {
     this.listState = { state: 'loading' };
-    this.tasksService
-      .getAll({
-        q: 'learn',
-        _sort: 'createdAt',
-        _order: 'desc',
-        done_like: '',
-      })
-      .then((response) => {
-        if (Array.isArray(response)) {
-          this.listState = {
-            state: 'success',
-            results: response,
-          };
-        } else {
-          this.listState = {
-            state: 'error',
-            error: response,
-          };
-        }
-      });
+
+    this.form.valueChanges.subscribe(() => {
+      this.getAllTasks(getAllTasksSearchParams(this.form.getRawValue()));
+    });
+
+    this.getAllTasks(getAllTasksSearchParams(this.form.getRawValue()));
+  }
+
+  getAllTasks(searchParams: GetAllTasksSearchParams) {
+    this.tasksService.getAll(searchParams).then((response) => {
+      if (Array.isArray(response)) {
+        this.listState = {
+          state: 'success',
+          results: response,
+        };
+      } else {
+        this.listState = {
+          state: 'error',
+          error: response,
+        };
+      }
+    });
   }
 
   addTask(name: string, tasks: Task[]) {
