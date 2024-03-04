@@ -8,6 +8,7 @@ import {
 import { SORT_BY, SortBy } from '../../shared/enums/sort-by.enum';
 import { TASK_STATUS, TaskStatus } from '../model/task-status.enum';
 import { FormValue } from '../../utils/form-value.type';
+import { startWith, Subscription } from 'rxjs';
 
 type TasksListFiltersForm = FormGroup<{
   searchTerm: FormControl<string>;
@@ -111,6 +112,8 @@ export class TasksListFiltersComponent {
   protected sortOptions = SORT_BY;
   protected statusOptions = TASK_STATUS;
 
+  private formChangesSubscription?: Subscription;
+
   sort(sort: SortBy) {
     this.form.patchValue({
       sortBy: sort,
@@ -118,8 +121,14 @@ export class TasksListFiltersComponent {
   }
 
   ngOnInit() {
-    this.form.valueChanges.subscribe(() => {
-      this.filtersChange.emit(this.form.getRawValue());
-    });
+    this.formChangesSubscription = this.form.valueChanges
+      .pipe(startWith(this.form.value))
+      .subscribe(() => {
+        this.filtersChange.emit(this.form.getRawValue());
+      });
+  }
+
+  ngOnDestroy() {
+    this.formChangesSubscription?.unsubscribe();
   }
 }
