@@ -5,11 +5,18 @@ import { NgIf } from '@angular/common';
 import { RemoveItemButtonComponent } from '../../ui/remove-item-button.component';
 import { Task } from '../model/Task';
 import { TaskUpdatePayload } from '../data-access/tasks.service';
+import { CustomDatePipe } from '../../utils/pipes/custom-date.pipe';
 
 @Component({
   selector: 'app-task-card',
   standalone: true,
-  imports: [AutosizeTextareaComponent, NgIcon, NgIf, RemoveItemButtonComponent],
+  imports: [
+    AutosizeTextareaComponent,
+    NgIcon,
+    NgIf,
+    RemoveItemButtonComponent,
+    CustomDatePipe,
+  ],
   template: `
     <div class="rounded-md shadow-md p-4 block" [class.bg-green-300]="task.done">
       <button
@@ -35,7 +42,11 @@ import { TaskUpdatePayload } from '../data-access/tasks.service';
           </ng-template>
         </section>
         <footer class=" pt-2 flex items-center justify-end">
-          <ng-icon name="featherCalendar" class="text-sm" />
+          <ng-icon
+            [title]="task.createdAt | customDate"
+            name="featherCalendar"
+            class="text-sm"
+          />
         </footer>
       </button>
     </div>
