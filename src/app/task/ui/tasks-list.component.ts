@@ -62,6 +62,4 @@ export class TasksListComponent {
       }
     });
   }
-
-  protected readonly console = console;
 }

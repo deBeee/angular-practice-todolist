@@ -42,11 +42,8 @@ import { CustomDatePipe } from '../../utils/pipes/custom-date.pipe';
           </ng-template>
         </section>
         <footer class=" pt-2 flex items-center justify-end">
-          <ng-icon
-            [title]="task.createdAt | customDate"
-            name="featherCalendar"
-            class="text-sm"
-          />
+          <span class="text-xs pr-1">{{ task.createdAt | customDate }} </span>
+          <ng-icon name="featherCalendar" class="text-sm" />
         </footer>
       </button>
     </div>
