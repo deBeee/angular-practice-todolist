@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { TasksListComponent } from './ui/tasks-list.component';
-import { SubmitTextComponent } from '../ui/submit-text.component';
+import { SubmitTextComponent } from '../shared/ui/submit-text.component';
 import { Task } from './model/Task';
 import { NgIf } from '@angular/common';
 import { TasksService } from './data-access/tasks.service';

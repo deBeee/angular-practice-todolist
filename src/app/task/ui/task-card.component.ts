@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AutosizeTextareaComponent } from '../../ui/autosize-textarea.component';
+import { AutosizeTextareaComponent } from '../../shared/ui/autosize-textarea.component';
 import { NgIcon } from '@ng-icons/core';
 import { NgIf } from '@angular/common';
-import { RemoveItemButtonComponent } from '../../ui/remove-item-button.component';
+import { RemoveItemButtonComponent } from '../../shared/ui/remove-item-button.component';
 import { Task } from '../model/Task';
 import { TaskUpdatePayload } from '../data-access/tasks.service';
 import { CustomDatePipe } from '../../utils/pipes/custom-date.pipe';
