@@ -105,19 +105,26 @@ export class TaskListPageComponent {
 
   ngOnInit() {
     this.listState = { state: 'loading' };
-    this.tasksService.getAll().then((response) => {
-      if (Array.isArray(response)) {
-        this.listState = {
-          state: 'success',
-          results: response,
-        };
-      } else {
-        this.listState = {
-          state: 'error',
-          error: response,
-        };
-      }
-    });
+    this.tasksService
+      .getAll({
+        q: 'learn',
+        _sort: 'createdAt',
+        _order: 'desc',
+        done_like: '',
+      })
+      .then((response) => {
+        if (Array.isArray(response)) {
+          this.listState = {
+            state: 'success',
+            results: response,
+          };
+        } else {
+          this.listState = {
+            state: 'error',
+            error: response,
+          };
+        }
+      });
   }
 
   addTask(name: string, tasks: Task[]) {
