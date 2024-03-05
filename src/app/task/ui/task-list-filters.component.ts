@@ -25,7 +25,7 @@ export type TasksListFiltersFormValue = FormValue<TasksListFiltersForm>;
   template: `
     <form [formGroup]="form">
       <details open>
-        <summary class="marker:content-none">Filters</summary>
+        <summary class="marker:content-none hover:cursor-pointer">Filters</summary>
         <div class="mb-2 flex justify-between">
           <fieldset class="flex flex-col">
             <label for="filter-search-term">Search</label>
@@ -121,7 +121,7 @@ export class TasksListFiltersComponent {
   }
 
   ngOnInit() {
-    this.formChangesSubscription = this.form.valueChanges
+    this.formChangesSubscription = this.form.valueChanges // return hot observable - requires unsubscription
       .pipe(startWith(this.form.value), debounceTime(200))
       .subscribe(() => {
         this.filtersChange.emit(this.form.getRawValue());
