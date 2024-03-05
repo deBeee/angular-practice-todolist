@@ -40,10 +40,10 @@ export class TasksListComponent {
 
   deleteTask(taskId: string) {
     this.tasksService.delete(taskId).then((response) => {
-      if ('id' in response) {
-        this.tasks = this.tasks.filter((task) => task.id !== response.id);
-      } else {
+      if (response instanceof Error) {
         alert(response.message);
+      } else {
+        this.tasks = this.tasks.filter((task) => task.id !== taskId);
       }
     });
   }

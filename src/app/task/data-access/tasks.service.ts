@@ -35,7 +35,7 @@ export class TasksService {
   async delete(taskId: string) {
     return fetch(`${this.URL}/tasks/${taskId}`, {
       method: 'DELETE',
-    }).then<Task | Error>((response) => {
+    }).then<Error | undefined>((response) => {
       if (response.ok) {
         return response.json();
       }
