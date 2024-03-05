@@ -39,27 +39,30 @@ export class TasksListComponent {
   private tasksService = inject(TasksService);
 
   deleteTask(taskId: string) {
-    this.tasksService.delete(taskId).then((response) => {
-      if (response instanceof Error) {
-        alert(response.message);
-      } else {
+    this.tasksService.delete(taskId).subscribe({
+      next: () => {
         this.tasks = this.tasks.filter((task) => task.id !== taskId);
-      }
+      },
+      error: (response) => {
+        alert(response.message);
+      },
     });
   }
 
-  updateTask(taskId: string, newTaskPayload: TaskUpdatePayload) {
-    this.tasksService.update(taskId, newTaskPayload).then((response) => {
-      if ('id' in response) {
+  updateTask(taskId: string, updatedTask: TaskUpdatePayload) {
+    this.tasksService.update(taskId, updatedTask).subscribe({
+      next: (response) => {
         this.tasks = this.tasks.map((task) => {
-          if (task.id === taskId) {
+          if (task.id === response.id) {
             return response;
+          } else {
+            return task;
           }
-          return task;
         });
-      } else {
+      },
+      error: (response) => {
         alert(response.message);
-      }
+      },
     });
   }
 }
