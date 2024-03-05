@@ -2,17 +2,28 @@ import { Injectable } from '@angular/core';
 import { Task } from '../model/Task';
 import { ListFetchingError } from '../../utils/list-state.type';
 import { wait } from '../../utils/wait';
+
 export type TaskUpdatePayload = { name?: string; done?: boolean };
+
+export type GetAllTasksSearchParams = {
+  q: string;
+  _sort: 'createdAt';
+  _order: 'desc' | 'asc';
+  done_like: 'true' | 'false' | '';
+};
 @Injectable({
   providedIn: 'root',
 })
 export class TasksService {
   private URL = 'http://localhost:3000';
 
-  async getAll() {
+  async getAll(searchParams: GetAllTasksSearchParams) {
     await wait();
 
-    return fetch(`${this.URL}/tasks`).then<Task[] | ListFetchingError>((response) => {
+    const url = new URL('/tasks', this.URL); // equivalent `${this.URL}/tasks`
+    url.search = new URLSearchParams(searchParams).toString();
+
+    return fetch(url).then<Task[] | ListFetchingError>((response) => {
       if (response.ok) {
         return response.json();
       }
@@ -24,7 +35,7 @@ export class TasksService {
   async delete(taskId: string) {
     return fetch(`${this.URL}/tasks/${taskId}`, {
       method: 'DELETE',
-    }).then<Task | Error>((response) => {
+    }).then<Error | undefined>((response) => {
       if (response.ok) {
         return response.json();
       }
