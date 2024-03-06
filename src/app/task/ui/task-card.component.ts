@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AutosizeTextareaComponent } from '../../shared/ui/autosize-textarea.component';
 import { NgIcon } from '@ng-icons/core';
-import { NgIf } from '@angular/common';
 import { RemoveItemButtonComponent } from '../../shared/ui/remove-item-button.component';
 import { Task } from '../model/Task';
 import { TaskUpdatePayload } from '../data-access/tasks.service';
 import { CustomDatePipe } from '../../utils/pipes/custom-date.pipe';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-task-card',
@@ -13,9 +13,9 @@ import { CustomDatePipe } from '../../utils/pipes/custom-date.pipe';
   imports: [
     AutosizeTextareaComponent,
     NgIcon,
-    NgIf,
     RemoveItemButtonComponent,
     CustomDatePipe,
+    NgIf,
   ],
   template: `
     <div class="rounded-md shadow-md p-4 block" [class.bg-green-300]="task.done">
@@ -28,18 +28,17 @@ import { CustomDatePipe } from '../../utils/pipes/custom-date.pipe';
           <app-remove-item-button (confirm)="delete.emit()" />
         </header>
         <section class="text-left">
-          <app-autosize-textarea
-            *ngIf="editMode; else previewModeTemplate"
-            (keyup.escape)="editMode = false"
-            (submitText)="updateTaskName($event)"
-            [value]="task.name"
-          />
-
-          <ng-template #previewModeTemplate>
+          @if (editMode) {
+            <app-autosize-textarea
+              (keyup.escape)="editMode = false"
+              (submitText)="updateTaskName($event)"
+              [value]="task.name"
+            />
+          } @else {
             <span [class.line-through]="task.done">
               {{ task.name }}
             </span>
-          </ng-template>
+          }
         </section>
         <footer class=" pt-2 flex items-center justify-end">
           <span class="text-xs pr-1">{{ task.createdAt | customDate }} </span>
