@@ -1,17 +1,16 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { NgIf } from '@angular/common';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import {
+  featherCheck,
   featherTrash2,
   featherUser,
-  featherCheck,
   featherX,
 } from '@ng-icons/feather-icons';
 
 @Component({
   selector: 'app-remove-item-button',
   standalone: true,
-  imports: [NgIf, NgIconComponent],
+  imports: [NgIconComponent],
   viewProviders: [provideIcons({ featherTrash2, featherUser, featherCheck, featherX })],
   template: `
     <div
@@ -27,24 +26,18 @@ import {
         [class.bg-red-700]="removeMode"
         >Are you sure?</span
       >
-      @if (!removeMode; as value) {
+      @if (!removeMode) {
         <button
-          *ngIf="!removeMode"
           (click)="removeMode = true; $event.stopPropagation()"
           class="flex hover:bg-white hover:rounded-full"
         >
           <ng-icon name="featherTrash2" class="icon--hover" />
         </button>
       } @else {
-        <button
-          *ngIf="removeMode"
-          (click)="removeMode = false; $event.stopPropagation()"
-          class="flex mr-1"
-        >
+        <button (click)="removeMode = false; $event.stopPropagation()" class="flex mr-1">
           <ng-icon name="featherX" class="hover:bg-white icon--hover" />
         </button>
         <button
-          *ngIf="removeMode"
           (click)="confirm.emit(); removeMode = false; $event.stopPropagation()"
           class="flex pr-2"
         >

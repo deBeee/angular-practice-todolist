@@ -11,6 +11,12 @@
       "createdAt": 1700291084476,
       "updatedAt": null,
       "id": 2
+    },
+    {
+      "name": "Test",
+      "createdAt": 1709756534503,
+      "updatedAt": null,
+      "id": 3
     }
   ],
   "tasks": [
@@ -28,7 +34,7 @@
       "name": "Learn components and more stuff",
       "done": false,
       "createdAt": 1693042949144,
-      "updatedAt": 1697883805423
+      "updatedAt": 1709763446175
     },
     {
       "createdAt": 1695467694663,
@@ -44,7 +50,7 @@
       "done": false,
       "createdAt": 1697281707175,
       "id": 4,
-      "updatedAt": 1697883806405
+      "updatedAt": 1709745546640
     },
     {
       "name": "Feed your dog",
@@ -57,16 +63,16 @@
     {
       "name": "Plank for 2 minutes 💪",
       "projectId": 1,
-      "done": true,
+      "done": false,
       "createdAt": 1697886596823,
-      "updatedAt": 1698775117093,
+      "updatedAt": 1709763306403,
       "id": 6
     },
     {
       "name": "Buy flowers 💐",
       "projectId": 1,
       "createdAt": 1700292845327,
-      "updatedAt": 1709733513947,
+      "updatedAt": 1709763580218,
       "done": false,
       "id": 7
     }
