@@ -35,6 +35,6 @@ export class TasksService {
   }
 
   add(name: string) {
-    return this.http.post<Task>(`${this.URL}/tasks`, { name, done: false });
+    return this.http.post<Task>(`${this.URL}/tasks`, { name });
   }
 }
