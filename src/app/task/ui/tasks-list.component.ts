@@ -38,7 +38,7 @@ export class TasksListComponent {
 
   private tasksService = inject(TasksService);
 
-  deleteTask(taskId: string) {
+  deleteTask(taskId: number) {
     this.tasksService.delete(taskId).subscribe({
       next: () => {
         this.tasks = this.tasks.filter((task) => task.id !== taskId);
@@ -49,7 +49,7 @@ export class TasksListComponent {
     });
   }
 
-  updateTask(taskId: string, taskUpdatePayload: TaskUpdatePayload) {
+  updateTask(taskId: number, taskUpdatePayload: TaskUpdatePayload) {
     this.tasksService.update(taskId, taskUpdatePayload).subscribe({
       next: (updatedTask) => {
         this.tasks = this.tasks.map((task) => {
