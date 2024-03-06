@@ -68,14 +68,14 @@ export class TaskListPageComponent {
 
   addTask(name: string, tasks: Task[]): void {
     this.tasksService.add(name).subscribe({
-      next: (response) => {
+      next: (task) => {
         this.listState = {
           state: LIST_STATE_VALUE.SUCCESS,
-          results: tasks.concat(response),
+          results: tasks.concat(task),
         };
       },
-      error: (response) => {
-        alert(response.message);
+      error: (err) => {
+        alert(err.message);
       },
     });
   }

@@ -43,25 +43,25 @@ export class TasksListComponent {
       next: () => {
         this.tasks = this.tasks.filter((task) => task.id !== taskId);
       },
-      error: (response) => {
-        alert(response.message);
+      error: (err) => {
+        alert(err.message);
       },
     });
   }
 
-  updateTask(taskId: string, updatedTask: TaskUpdatePayload) {
-    this.tasksService.update(taskId, updatedTask).subscribe({
-      next: (response) => {
+  updateTask(taskId: string, taskUpdatePayload: TaskUpdatePayload) {
+    this.tasksService.update(taskId, taskUpdatePayload).subscribe({
+      next: (updatedTask) => {
         this.tasks = this.tasks.map((task) => {
-          if (task.id === response.id) {
-            return response;
+          if (task.id === updatedTask.id) {
+            return updatedTask;
           } else {
             return task;
           }
         });
       },
-      error: (response) => {
-        alert(response.message);
+      error: (err) => {
+        alert(err.message);
       },
     });
   }

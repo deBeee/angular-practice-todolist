@@ -18,8 +18,7 @@ export class TasksService {
 
   private http = inject(HttpClient);
 
-  constructor() {}
-
+  // HttpClient returns cold observable which means it is getting automatically unsubscribed once data is received so we don't have to unsubscribe explicitly
   getAll(searchParams: GetAllTasksSearchParams) {
     return this.http.get<Task[]>(`${this.URL}/tasks`, {
       //observe : "response" - then get returns whole HttpResponse not Task[]
