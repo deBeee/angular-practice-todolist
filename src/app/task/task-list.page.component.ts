@@ -22,15 +22,19 @@ import { getAllTasksSearchParams } from './data-access/tasks-filters.adapter';
       "
     />
     <app-tasks-list-filters (filtersChange)="handleFiltersChange($event)" />
-    <app-tasks-list
-      *ngIf="listState.state === listStateValue.SUCCESS"
-      class="block mt-4"
-      [tasks]="listState.results"
-    />
-    <p *ngIf="listState.state === listStateValue.ERROR">
-      {{ listState.error.message }}
-    </p>
-    <p *ngIf="listState.state === listStateValue.LOADING">Loading...</p>
+    @switch (listState.state) {
+      @case (listStateValue.SUCCESS) {
+        <app-tasks-list class="block mt-4" [tasks]="listState.results" />
+      }
+      @case (listStateValue.ERROR) {
+        <p>
+          {{ listState.error.message }}
+        </p>
+      }
+      @case (listStateValue.LOADING) {
+        <p>Loading...</p>
+      }
+    }
   `,
 })
 export class TaskListPageComponent {
