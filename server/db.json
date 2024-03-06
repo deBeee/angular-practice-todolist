@@ -64,9 +64,9 @@
     },
     {
       "name": "Buy flowers 💐",
-      "projectId": null,
+      "projectId": 1,
       "createdAt": 1700292845327,
-      "updatedAt": 1709724600787,
+      "updatedAt": 1709733513947,
       "done": false,
       "id": 7
     }
