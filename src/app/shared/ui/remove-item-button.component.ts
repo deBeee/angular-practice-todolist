@@ -27,27 +27,30 @@ import {
         [class.bg-red-700]="removeMode"
         >Are you sure?</span
       >
-      <button
-        *ngIf="!removeMode"
-        (click)="removeMode = true; $event.stopPropagation()"
-        class="flex hover:bg-white hover:rounded-full"
-      >
-        <ng-icon name="featherTrash2" class="icon--hover" />
-      </button>
-      <button
-        *ngIf="removeMode"
-        (click)="removeMode = false; $event.stopPropagation()"
-        class="flex mr-1"
-      >
-        <ng-icon name="featherX" class="hover:bg-white icon--hover" />
-      </button>
-      <button
-        *ngIf="removeMode"
-        (click)="confirm.emit(); removeMode = false; $event.stopPropagation()"
-        class="flex pr-2"
-      >
-        <ng-icon name="featherCheck" class="hover:bg-white icon--hover" />
-      </button>
+      @if (!removeMode; as value) {
+        <button
+          *ngIf="!removeMode"
+          (click)="removeMode = true; $event.stopPropagation()"
+          class="flex hover:bg-white hover:rounded-full"
+        >
+          <ng-icon name="featherTrash2" class="icon--hover" />
+        </button>
+      } @else {
+        <button
+          *ngIf="removeMode"
+          (click)="removeMode = false; $event.stopPropagation()"
+          class="flex mr-1"
+        >
+          <ng-icon name="featherX" class="hover:bg-white icon--hover" />
+        </button>
+        <button
+          *ngIf="removeMode"
+          (click)="confirm.emit(); removeMode = false; $event.stopPropagation()"
+          class="flex pr-2"
+        >
+          <ng-icon name="featherCheck" class="hover:bg-white icon--hover" />
+        </button>
+      }
     </div>
   `,
   styles: [
