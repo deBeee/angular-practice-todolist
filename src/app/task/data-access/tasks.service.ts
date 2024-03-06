@@ -18,8 +18,7 @@ export class TasksService {
 
   private http = inject(HttpClient);
 
-  constructor() {}
-
+  // HttpClient request methods return cold observable which means it is getting automatically unsubscribed once data is received so we don't have to unsubscribe explicitly
   getAll(searchParams: GetAllTasksSearchParams) {
     return this.http.get<Task[]>(`${this.URL}/tasks`, {
       //observe : "response" - then get returns whole HttpResponse not Task[]
@@ -27,15 +26,21 @@ export class TasksService {
     });
   }
 
-  delete(taskId: string) {
+  getAllByProjectId(projectId: string, searchParams: GetAllTasksSearchParams) {
+    return this.http.get<Task[]>(`${this.URL}/tasks`, {
+      params: { ...searchParams, projectId },
+    });
+  }
+
+  delete(taskId: number) {
     return this.http.delete(`${this.URL}/tasks/${taskId}`);
   }
 
-  update(taskId: string, payload: TaskUpdatePayload) {
+  update(taskId: number, payload: TaskUpdatePayload) {
     return this.http.patch<Task>(`${this.URL}/tasks/${taskId}`, payload);
   }
 
   add(name: string) {
-    return this.http.post<Task>(`${this.URL}/tasks`, { name, done: false });
+    return this.http.post<Task>(`${this.URL}/tasks`, { name });
   }
 }

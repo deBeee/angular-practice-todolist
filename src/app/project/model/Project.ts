@@ -1,6 +1,6 @@
-export type Task = {
+export type Project = {
   id: number;
-  done: boolean;
   name: string;
   createdAt: number;
+  updatedAt: number;
 };

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { TasksListComponent } from './ui/tasks-list.component';
 import { SubmitTextComponent } from '../shared/ui/submit-text.component';
 import { Task } from './model/Task';
@@ -34,6 +34,7 @@ import { getAllTasksSearchParams } from './data-access/tasks-filters.adapter';
   `,
 })
 export class TaskListPageComponent {
+  @Input() projectId?: string;
   private tasksService = inject(TasksService);
 
   listState: ComponentListState<Task> = { state: LIST_STATE_VALUE.IDLE };
@@ -50,11 +51,15 @@ export class TaskListPageComponent {
   getAllTasks(searchParams: GetAllTasksSearchParams): void {
     this.listState = { state: LIST_STATE_VALUE.LOADING };
 
-    this.tasksService.getAll(searchParams).subscribe({
-      next: (result) => {
+    const source$ = this.projectId
+      ? this.tasksService.getAllByProjectId(this.projectId, searchParams)
+      : this.tasksService.getAll(searchParams);
+
+    source$.subscribe({
+      next: (tasks) => {
         this.listState = {
           state: LIST_STATE_VALUE.SUCCESS,
-          results: result,
+          results: tasks,
         };
       },
       error: (err) => {
@@ -68,14 +73,14 @@ export class TaskListPageComponent {
 
   addTask(name: string, tasks: Task[]): void {
     this.tasksService.add(name).subscribe({
-      next: (response) => {
+      next: (task) => {
         this.listState = {
           state: LIST_STATE_VALUE.SUCCESS,
-          results: tasks.concat(response),
+          results: tasks.concat(task),
         };
       },
-      error: (response) => {
-        alert(response.message);
+      error: (err) => {
+        alert(err.message);
       },
     });
   }
