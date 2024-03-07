@@ -12,6 +12,7 @@ import { getAllTasksSearchParams } from './data-access/tasks-filters.adapter';
 import { TasksKanbanViewComponent } from './ui/tasks-kanban.component';
 import { featherColumns, featherList } from '@ng-icons/feather-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { AppConfigStateService } from '../config/config.state.service';
 
 @Component({
   selector: 'app-task-list-page',
@@ -33,23 +34,23 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
     <div class="flex gap-4 items-center my-4">
       <span> View mode:</span>
       <button
-        (click)="view = 'list'"
+        (click)="$view.set('list')"
         class="flex"
-        [class.text-green-500]="view === 'list'"
+        [class.text-green-500]="$view() === 'list'"
       >
         <ng-icon name="featherList" />
       </button>
       <button
-        (click)="view = 'kanban'"
+        (click)="$view.set('kanban')"
         class="flex"
-        [class.text-green-500]="view === 'kanban'"
+        [class.text-green-500]="$view() === 'kanban'"
       >
         <ng-icon name="featherColumns" />
       </button>
     </div>
     @switch (listState.state) {
       @case (listStateValue.SUCCESS) {
-        @if (view === 'list') {
+        @if ($view() === 'list') {
           <app-tasks-list class="block mt-4" [tasks]="listState.results" />
         } @else {
           <app-tasks-kanban-view [tasks]="listState.results" />
@@ -71,13 +72,19 @@ export class TaskListPageComponent {
   @Input() projectId?: string;
   @Input() view?: 'kanban' | 'list';
   @Input() urgent?: boolean;
+
   private tasksService = inject(TasksService);
+
+  $view = inject(AppConfigStateService).tasksListView;
 
   listState: ComponentListState<Task> = { state: LIST_STATE_VALUE.IDLE };
   listStateValue = LIST_STATE_VALUE;
 
   ngOnInit() {
-    this.view = this.view || 'list';
+    if (this.view) {
+      this.$view.set(this.view);
+    }
+
     this.urgent = this.urgent || false;
   }
 

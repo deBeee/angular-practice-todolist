@@ -31,6 +31,7 @@ export const routes: Routes = [
       },
       {
         path: ':projectId',
+        title: 'Project tasks',
         component: TaskListPageComponent,
       },
     ],
