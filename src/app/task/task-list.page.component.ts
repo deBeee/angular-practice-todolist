@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, computed, inject, Input } from '@angular/core';
 import { TasksListComponent } from './ui/tasks-list.component';
 import { SubmitTextComponent } from '../shared/ui/submit-text.component';
 import { Task } from './model/Task';
@@ -36,21 +36,21 @@ import { AppConfigStateService } from '../config/config.state.service';
       <button
         (click)="configStateService.updateTaskListView('list')"
         class="flex"
-        [class.text-green-500]="$view().tasksListView === 'list'"
+        [class.text-green-500]="$view() === 'list'"
       >
         <ng-icon name="featherList" />
       </button>
       <button
         (click)="configStateService.updateTaskListView('kanban')"
         class="flex"
-        [class.text-green-500]="$view().tasksListView === 'kanban'"
+        [class.text-green-500]="$view() === 'kanban'"
       >
         <ng-icon name="featherColumns" />
       </button>
     </div>
     @switch (listState.state) {
       @case (listStateValue.SUCCESS) {
-        @if ($view().tasksListView === 'list') {
+        @if ($view() === 'list') {
           <app-tasks-list class="block mt-4" [tasks]="listState.results" />
         } @else {
           <app-tasks-kanban-view [tasks]="listState.results" />
@@ -75,7 +75,7 @@ export class TaskListPageComponent {
 
   private tasksService = inject(TasksService);
   configStateService = inject(AppConfigStateService);
-  $view = this.configStateService.$value;
+  $view = computed(() => this.configStateService.$value().tasksListView); //returns Signal<TasksListView> and automatically recalculates the current value if the signal has changed
 
   listState: ComponentListState<Task> = { state: LIST_STATE_VALUE.IDLE };
   listStateValue = LIST_STATE_VALUE;
