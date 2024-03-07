@@ -2,13 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import { Task } from '../model/Task';
 import { HttpClient } from '@angular/common/http';
 
-export type TaskUpdatePayload = { name?: string; done?: boolean };
+export type TaskUpdatePayload = { name?: string; done?: boolean; urgent?: boolean };
 
 export type GetAllTasksSearchParams = {
   q: string;
   _sort: 'createdAt';
   _order: 'desc' | 'asc';
   done_like: 'true' | 'false' | '';
+  urgent_like: 'true' | '';
 };
 @Injectable({
   providedIn: 'root',

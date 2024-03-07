@@ -28,7 +28,7 @@ import { TaskCardComponent } from './task-card.component';
           />
         </li>
       } @empty {
-        <p>There are no tasks connected with this project</p>
+        <p>There are no tasks</p>
       }
     </ul>
   `,
