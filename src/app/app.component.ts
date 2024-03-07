@@ -1,7 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { TaskListPageComponent } from './task/task-list.page.component';
 import { ProjectListPageComponent } from './project/project-list.page.component';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { TasksStateService } from './task/data-access/tasks.state.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +39,9 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
         </li>
         <li><a routerLink="/projects" routerLinkActive="font-bold">Projects (0)</a></li>
         <li class="ml-auto">
-          <a routerLink="/tasks/urgent" routerLinkActive="font-bold">Urgent (0)</a>
+          <a routerLink="/tasks/urgent" routerLinkActive="font-bold"
+            >Urgent ({{ urgentCount }})</a
+          >
         </li>
       </ul>
     </nav>
@@ -47,8 +51,17 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
   `,
 })
 export class AppComponent {
-  // private router = inject(Router)
-  // constructor() {
-  //   this.router.navigateByUrl();
-  // }
+  tasksStateService = inject(TasksStateService);
+
+  urgentCount = 0;
+  private taskChangesSubscription?: Subscription;
+  ngOnInit() {
+    this.taskChangesSubscription = this.tasksStateService.value$.subscribe((state) => {
+      this.urgentCount = state.urgentCount;
+    });
+  }
+
+  ngOnDestroy() {
+    this.taskChangesSubscription?.unsubscribe();
+  }
 }
