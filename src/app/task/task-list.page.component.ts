@@ -34,23 +34,23 @@ import { AppConfigStateService } from '../config/config.state.service';
     <div class="flex gap-4 items-center my-4">
       <span> View mode:</span>
       <button
-        (click)="$view.set('list')"
+        (click)="configStateService.updateTaskListView('list')"
         class="flex"
-        [class.text-green-500]="$view() === 'list'"
+        [class.text-green-500]="$view().tasksListView === 'list'"
       >
         <ng-icon name="featherList" />
       </button>
       <button
-        (click)="$view.set('kanban')"
+        (click)="configStateService.updateTaskListView('kanban')"
         class="flex"
-        [class.text-green-500]="$view() === 'kanban'"
+        [class.text-green-500]="$view().tasksListView === 'kanban'"
       >
         <ng-icon name="featherColumns" />
       </button>
     </div>
     @switch (listState.state) {
       @case (listStateValue.SUCCESS) {
-        @if ($view() === 'list') {
+        @if ($view().tasksListView === 'list') {
           <app-tasks-list class="block mt-4" [tasks]="listState.results" />
         } @else {
           <app-tasks-kanban-view [tasks]="listState.results" />
@@ -74,15 +74,15 @@ export class TaskListPageComponent {
   @Input() urgent?: boolean;
 
   private tasksService = inject(TasksService);
-
-  $view = inject(AppConfigStateService).tasksListView;
+  configStateService = inject(AppConfigStateService);
+  $view = this.configStateService.$value;
 
   listState: ComponentListState<Task> = { state: LIST_STATE_VALUE.IDLE };
   listStateValue = LIST_STATE_VALUE;
 
   ngOnInit() {
     if (this.view) {
-      this.$view.set(this.view);
+      this.configStateService.updateTaskListView(this.view);
     }
 
     this.urgent = this.urgent || false;
