@@ -2,7 +2,6 @@ import { Component, computed, inject, Input } from '@angular/core';
 import { TasksListComponent } from './ui/tasks-list.component';
 import { SubmitTextComponent } from '../shared/ui/submit-text.component';
 import { Task } from './model/Task';
-import { GetAllTasksSearchParams, TasksService } from './data-access/tasks.service';
 import { ComponentListState, LIST_STATE_VALUE } from '../utils/list-state.type';
 import {
   TasksListFiltersComponent,
@@ -13,6 +12,8 @@ import { TasksKanbanViewComponent } from './ui/tasks-kanban.component';
 import { featherColumns, featherList } from '@ng-icons/feather-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { AppConfigStateService } from '../config/config.state.service';
+import { TasksService } from './data-access/tasks.service';
+import { GetAllTasksSearchParams } from './data-access/tasks.api.service';
 
 @Component({
   selector: 'app-task-list-page',

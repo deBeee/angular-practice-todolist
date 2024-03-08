@@ -3,10 +3,10 @@ import { AutosizeTextareaComponent } from '../../shared/ui/autosize-textarea.com
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { RemoveItemButtonComponent } from '../../shared/ui/remove-item-button.component';
 import { Task } from '../model/Task';
-import { TaskUpdatePayload } from '../data-access/tasks.service';
 import { CustomDatePipe } from '../../utils/pipes/custom-date.pipe';
 import { NgIf } from '@angular/common';
 import { bootstrapBookmark, bootstrapBookmarkFill } from '@ng-icons/bootstrap-icons';
+import { TaskUpdatePayload } from '../data-access/tasks.api.service';
 
 @Component({
   selector: 'app-task-card',

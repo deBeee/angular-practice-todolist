@@ -4,8 +4,9 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { featherCalendar } from '@ng-icons/feather-icons';
 import { RemoveItemButtonComponent } from '../../shared/ui/remove-item-button.component';
 import { AutosizeTextareaComponent } from '../../shared/ui/autosize-textarea.component';
-import { TasksService, TaskUpdatePayload } from '../data-access/tasks.service';
 import { TaskCardComponent } from './task-card.component';
+import { TasksService } from '../data-access/tasks.service';
+import { TaskUpdatePayload } from '../data-access/tasks.api.service';
 
 @Component({
   selector: 'app-tasks-list',
