@@ -19,7 +19,10 @@ import { bootstrapBookmark, bootstrapBookmarkFill } from '@ng-icons/bootstrap-ic
     NgIf,
   ],
   template: `
-    <div class="rounded-md shadow-md p-4 block" [class.bg-green-300]="task.done">
+    <div
+      class="rounded-md shadow-md hover:shadow-lg p-4 block"
+      [class.bg-green-300]="task.done"
+    >
       <button
         class="w-full"
         (click)="!editMode && handleSingleClick()"
