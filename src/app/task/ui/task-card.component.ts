@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AutosizeTextareaComponent } from '../../shared/ui/autosize-textarea.component';
-import { NgIcon } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { RemoveItemButtonComponent } from '../../shared/ui/remove-item-button.component';
 import { Task } from '../model/Task';
-import { TaskUpdatePayload } from '../data-access/tasks.service';
 import { CustomDatePipe } from '../../utils/pipes/custom-date.pipe';
 import { NgIf } from '@angular/common';
+import { bootstrapBookmark, bootstrapBookmarkFill } from '@ng-icons/bootstrap-icons';
+import { TaskUpdatePayload } from '../data-access/tasks.api.service';
 
 @Component({
   selector: 'app-task-card',
@@ -18,7 +19,10 @@ import { NgIf } from '@angular/common';
     NgIf,
   ],
   template: `
-    <div class="rounded-md shadow-md p-4 block" [class.bg-green-300]="task.done">
+    <div
+      class="rounded-md shadow-md hover:shadow-lg p-4 block"
+      [class.bg-green-300]="task.done"
+    >
       <button
         class="w-full"
         (click)="!editMode && handleSingleClick()"
@@ -40,14 +44,26 @@ import { NgIf } from '@angular/common';
             </span>
           }
         </section>
-        <footer class=" pt-2 flex items-center justify-end">
-          <span class="text-xs pr-1">{{ task.createdAt | customDate }} </span>
-          <ng-icon name="featherCalendar" class="text-sm" />
+        <footer class=" pt-2 flex justify-between">
+          <button
+            class="flex items-center"
+            (click)="updateTaskUrgentStatus(); $event.stopPropagation()"
+          >
+            <ng-icon
+              [name]="task.urgent ? 'bootstrapBookmarkFill' : 'bootstrapBookmark'"
+              class="text-sm"
+            />
+          </button>
+          <div class="flex items-center justify-end">
+            <span class="text-xs pr-1">{{ task.createdAt | customDate }} </span>
+            <ng-icon name="featherCalendar" class="text-sm" />
+          </div>
         </footer>
       </button>
     </div>
   `,
   styles: ``,
+  viewProviders: [provideIcons({ bootstrapBookmarkFill, bootstrapBookmark })],
 })
 export class TaskCardComponent {
   @Input({ required: true }) task!: Task;
@@ -57,6 +73,10 @@ export class TaskCardComponent {
   editMode = false;
 
   isSingleClick = true;
+
+  updateTaskUrgentStatus() {
+    this.update.emit({ urgent: !this.task.urgent });
+  }
 
   updateTaskName(newTaskName: string) {
     this.update.emit({ name: newTaskName });

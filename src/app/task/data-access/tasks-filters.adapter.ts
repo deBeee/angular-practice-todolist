@@ -1,22 +1,26 @@
-import { TASK_STATUS } from "../model/task-status.enum";
-import { TasksListFiltersFormValue } from "../ui/task-list-filters.component";
-import { GetAllTasksSearchParams } from "./tasks.service";
+import { TASK_STATUS } from '../model/task-status.enum';
+import { TasksListFiltersFormValue } from '../ui/task-list-filters.component';
+import { GetAllTasksSearchParams } from './tasks.api.service';
 
 export function getAllTasksSearchParams(
-  formValue: TasksListFiltersFormValue
+  formValue: TasksListFiltersFormValue & { urgent?: boolean },
 ): GetAllTasksSearchParams {
   let searchParams = {
-    _sort: "createdAt",
+    _sort: 'createdAt',
     _order: formValue.sortBy.toLocaleLowerCase(),
     q: formValue.searchTerm,
   } as GetAllTasksSearchParams;
 
   if (formValue.status === TASK_STATUS.TODO) {
-    searchParams.done_like = "false";
+    searchParams.done_like = 'false';
   } else if (formValue.status === TASK_STATUS.DONE) {
-    searchParams.done_like = "true";
+    searchParams.done_like = 'true';
   } else {
-    searchParams.done_like = "";
+    searchParams.done_like = '';
+  }
+
+  if (formValue.urgent) {
+    searchParams.urgent_like = 'true';
   }
 
   return searchParams;
